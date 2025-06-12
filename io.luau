@@ -4,5 +4,7 @@ local io = {}
 
 function io.WriteFile(filename: string, data: string): () end
 function io.ReadFile(filename: string): string end
+function io.write(...) end
+function io.system() end
 
 return io
