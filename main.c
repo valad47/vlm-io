@@ -58,3 +58,24 @@ int vlm_write(lua_State* L) {
         printf("%s", luaL_checkstring(L, i));
     return 0;
 }
+
+int vlm_shcall(lua_State* L) {
+    FILE *fp = popen(luaL_checkstring(L, 1), "r");
+    if(!fp)
+        luaL_error(L, "Failed to run command: %s", strerror(errno));
+
+    char *buff = malloc(4096);
+    size_t totalsize = 0;
+    size_t size = 0;
+    while((size = fread(buff+totalsize, 1, 4096, fp)) == 4096) {
+        totalsize += size;
+        buff = realloc(buff, totalsize + 4096);
+    }
+    totalsize += size;
+
+    lua_pushlstring(L, buff, totalsize);
+    free(buff);
+    pclose(fp);
+
+    return 1;
+}
