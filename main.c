@@ -49,7 +49,7 @@ int vlm_DeleteFile(lua_State *L) {
 }
 
 int vlm_FileExists(lua_State *L) {
-    lua_pushboolean(L, access(luaL_checkstring(L, 1), F_OK));
+    lua_pushboolean(L, !access(luaL_checkstring(L, 1), F_OK));
     return 1;
 }
 
